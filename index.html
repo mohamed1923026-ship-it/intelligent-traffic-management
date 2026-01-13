@@ -421,20 +421,24 @@ createApp({
         };
 
         const fetchData = async () => {
-            try {
-                const response = await fetch('https://crenella-mirta-uncharge.ngrok-free.dev/api/status');
-                if (response.ok) {
-                    const newData = await response.json();
-                    state.value = newData;
-                    isConnected.value = true;
-                } else {
-                    isConnected.value = false;
-                }
-            } catch {
-                isConnected.value = false;
+    try {
+        const response = await fetch('https://crenella-mirta-uncharge.ngrok-free.dev/api/status', {
+            headers: {
+                'ngrok-skip-browser-warning': 'any-value-here'
             }
-        };
-
+        });
+        if (response.ok) {
+            const newData = await response.json();
+            state.value = newData;
+            isConnected.value = true;
+        } else {
+            isConnected.value = false;
+        }
+    } catch (err) {
+        console.error("Fetch error:", err);
+        isConnected.value = false;
+    }
+};
         onMounted(() => {
             fetchData();
             updateTime();
